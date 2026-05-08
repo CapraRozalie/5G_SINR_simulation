@@ -1,0 +1,3 @@
+function scoreNetwork(txs)
+
+end
