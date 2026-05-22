@@ -1,27 +1,26 @@
-function displayNetwork(txs,params)
+function displayNetwork(txs, rxConfig)
 
 if isempty(txs)
     error("txs is empty. Nothing to display.");
 end
 
-%% RECEIVER PARAMETERS
-
-bw = 20e6; % 20 MHz bandwidth
-rxNoiseFigure = 7; % dB
-rxNoisePower = -174 + 10*log10(bw) + rxNoiseFigure;
-rxGain = 0; % dBi
-rxAntennaHeight = 1.5; % m
-
-%% MAP
-
+% MAP VIEW
 viewer = siteviewer;
 viewer.Basemap = "topographic";
 
-show(txs)
+show(txs);
 
-%% SINR MAP
+% RECEIVER PARAMETERS (consistent with simulation)
+bw = rxConfig.bw;
+rxNoiseFigure = rxConfig.rxNoiseFigure;
+rxAntennaHeight = rxConfig.rxAntennaHeight;
 
-sinr(txs,"close-in", ...
+rxNoisePower = -174 + 10*log10(bw) + rxNoiseFigure;
+
+rxGain = 0;
+
+% SINR VISUALIZATION (ONLY for display, not scoring)
+sinr(txs, "close-in", ...
     ReceiverGain = rxGain, ...
     ReceiverAntennaHeight = rxAntennaHeight, ...
     ReceiverNoisePower = rxNoisePower, ...
