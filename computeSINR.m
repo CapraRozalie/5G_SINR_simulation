@@ -5,6 +5,8 @@ function metrics = computeSINR(rxConfig, txs)
 % bandwidth
 % noise figure
 % antenna height
+%
+% + latitude & longitude center
 % ==========================================
 bw = rxConfig.bw;
 nf = rxConfig.rxNoiseFigure;
@@ -19,36 +21,22 @@ persistent numRx
 
 if isempty(rxs)
 
-    gridStep = 0.00005;
-
     latCenter = 45.6965410830449;
     lonCenter = 27.184755895723;
+    
+    gridStep = 0.0004; % ~28 m resolution (much lighter than before)
+    latVec = (latCenter - 0.005) : gridStep : (latCenter + 0.005);
+    lonVec = (lonCenter - 0.005) : gridStep : (lonCenter + 0.005);
+    %approx 1km x 1km 600-800 receiver points
 
-    latVec = ...
-        (latCenter-0.001): ...
-        gridStep : ...
-        (latCenter+0.001);
-
-    lonVec = ...
-        (lonCenter-0.001): ...
-        gridStep : ...
-        (lonCenter+0.001);
-
-    latPts = repelem( ...
-        latVec(:), ...
-        numel(lonVec));
-
-    lonPts = repmat( ...
-        lonVec(:), ...
-        numel(latVec), ...
-        1);
-
+    latPts = repelem(latVec(:), numel(lonVec));
+    lonPts = repmat(lonVec(:), numel(latVec), 1);
+    
     rxs = rxsite( ...
-        "Latitude", latPts,...
-        "Longitude", lonPts,...
-        "AntennaHeight", ...
-        rxConfig.rxAntennaHeight);
-
+        "Latitude", latPts, ...
+        "Longitude", lonPts, ...
+        "AntennaHeight", rxConfig.rxAntennaHeight);
+    
     numRx = numel(rxs);
 
 end

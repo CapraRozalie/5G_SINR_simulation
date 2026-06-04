@@ -95,12 +95,8 @@ function runSimulation(~,~)
     rxConfig.bw = 20e6;              % 20 MHz bandwidth
     rxConfig.rxNoiseFigure = 7;      % dB (typical UE)
     rxConfig.rxAntennaHeight = 1.5;  % meters (user equipment height)
-    rxConfig.minLat=10;
-    rxConfig.maxLat=20;
-    rxConfig.minLon=10; 
-    rxConfig.maxLon=20;
 
-    myMap(txsConfig,rxConfig, workFq);
+    generateSim(txsConfig,rxConfig);
 
 end
 

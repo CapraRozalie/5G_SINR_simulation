@@ -1,4 +1,4 @@
-function generate(txsConfig, rxConfig, workFq)
+function generateSim(txsConfig, rxConfig)
 
 % ==========================================
 % VARIABLES PER TOWER:
@@ -13,7 +13,7 @@ function generate(txsConfig, rxConfig, workFq)
 
 numTowers = txsConfig.numTowers;
 
-fq = workFq;
+fq =3e9;
 
 varsPerTower = 5;
 
@@ -59,18 +59,13 @@ end
 % OBJECTIVE FUNCTION
 fitnessFcn = @(x) evaluateGA(x, txsConfig, rxConfig, fq);
 
-% START PARALLEL POOL
-if isempty(gcp('nocreate'))
-    parpool;
-end
-
 
 % GA SETTINGS
 options = optimoptions('ga', ...
     'PopulationSize',25,...
     'MaxGenerations',20,...
     'Display','iter',...
-    'UseParallel', true);
+    'UseParallel', false);
 
 % RUN OPTIMIZER
 
