@@ -21,8 +21,8 @@ persistent numRx
 
 if isempty(rxs)
 
-    latCenter = 45.6965410830449;
-    lonCenter = 27.184755895723;
+    latCenter = rxConfig.centerLat;
+    lonCenter = rxConfig.centerLon;
     
     gridStep = 0.0004; % ~28 m resolution (much lighter than before)
     latVec = (latCenter - 0.005) : gridStep : (latCenter + 0.005);

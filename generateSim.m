@@ -13,7 +13,7 @@ function generateSim(txsConfig, rxConfig)
 
 numTowers = txsConfig.numTowers;
 
-fq =3e9;
+fq =txsConfig.freq;
 
 varsPerTower = 5;
 
@@ -27,18 +27,18 @@ ub = [];
 for i = 1:numTowers
 
     lb = [lb ...
-        30 ... % power
+        txsConfig.minPower ... % power
         3 ...  % sectors
-        0 ...  % downtilt
+        txsConfig.minDowntilt ...  % downtilt
         4 ...  % array size
-        20];   % taper
+        txsConfig.minTaper];   % taper
 
     ub = [ub ...
-        46 ...
+        txsConfig.maxPower ...
         8 ...
-        20 ...
+        txsConfig.maxDowntilt ...
         16 ...
-        40];
+        txsConfig.maxTaper];
 
 end
 
