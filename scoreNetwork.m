@@ -1,28 +1,31 @@
 function score = scoreNetwork(metrics)
 
-% WEIGHTS (tune these later)
-wCoverage = 0.4;
-wMean     = 0.3;
-wEdge     = 0.3;   % 5th percentile SINR (cell-edge performance)
-
-% NORMALIZATION (important for stability)
-
-% coverage is already [0,1]
 coverage = metrics.coverage;
-
-% SINR metrics are in dB → normalize to reasonable range
 meanSINR = metrics.meanSINR;
 edgeSINR = metrics.sinr5th;
+stdSINR = metrics.sinrStd;
 
-% soft normalization (prevents dominance by extreme values)
+% Normalize metrics
+
+coverageScore = coverage;
 meanScore = tanh(meanSINR / 10);
 edgeScore = tanh(edgeSINR / 10);
+stdPenalty = tanh(stdSINR / 15);
 
-% FINAL SCORE
-score = ...
-    0.35 * coverage + ...
-    0.25 * tanh(meanSINR/10) + ...
-    0.25 * tanh(edgeSINR/10) - ...
-    0.15 * tanh(metrics.sinrStd/10)
+% Weights
+
+wCoverage = 0.40;
+wMean = 0.25;
+wEdge = 0.25;
+wStd = 0.10;
+
+score = wCoverage * coverageScore + wMean * meanScore + wEdge * edgeScore - wStd * stdPenalty;
+
+fprintf( "cov=%.2f mean=%.2f edge=%.2f std=%.2f score=%.3f\n", ...
+    coverage,...
+    meanSINR,...
+    edgeSINR,...
+    stdSINR,...
+    score);
 
 end

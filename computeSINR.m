@@ -1,5 +1,11 @@
 function metrics = computeSINR(rxConfig, txs)
 
+% ==========================================
+% RECIVER PARAMETERS:
+% bandwidth
+% noise figure
+% antenna height
+% ==========================================
 bw = rxConfig.bw;
 nf = rxConfig.rxNoiseFigure;
 
@@ -8,24 +14,44 @@ linearNoise = db2pow(noisePower_dBm);
 
 numTx = numel(txs);
 
-% Small realistic test area
-gridStep = 0.00005;
+persistent rxs
+persistent numRx
 
-latCenter = 45.6965410830449;
-lonCenter = 27.184755895723;
+if isempty(rxs)
 
-latVec = (latCenter - 0.001):gridStep:(latCenter + 0.001);
-lonVec = (lonCenter - 0.001):gridStep:(lonCenter + 0.001);
+    gridStep = 0.00005;
 
-latPts = repelem(latVec(:), numel(lonVec));
-lonPts = repmat(lonVec(:), numel(latVec), 1);
+    latCenter = 45.6965410830449;
+    lonCenter = 27.184755895723;
 
-rxs = rxsite( ...
-    "Latitude", latPts, ...
-    "Longitude", lonPts, ...
-    "AntennaHeight", rxConfig.rxAntennaHeight);
+    latVec = ...
+        (latCenter-0.001): ...
+        gridStep : ...
+        (latCenter+0.001);
 
-numRx = numel(rxs);
+    lonVec = ...
+        (lonCenter-0.001): ...
+        gridStep : ...
+        (lonCenter+0.001);
+
+    latPts = repelem( ...
+        latVec(:), ...
+        numel(lonVec));
+
+    lonPts = repmat( ...
+        lonVec(:), ...
+        numel(latVec), ...
+        1);
+
+    rxs = rxsite( ...
+        "Latitude", latPts,...
+        "Longitude", lonPts,...
+        "AntennaHeight", ...
+        rxConfig.rxAntennaHeight);
+
+    numRx = numel(rxs);
+
+end
 
 prMatrix = zeros(numRx, numTx);
 

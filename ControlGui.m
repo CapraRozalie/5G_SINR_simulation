@@ -100,7 +100,7 @@ function runSimulation(~,~)
     rxConfig.minLon=10; 
     rxConfig.maxLon=20;
 
-    myMap(txsConfig,rxConfig);
+    myMap(txsConfig,rxConfig, workFq);
 
 end
 
