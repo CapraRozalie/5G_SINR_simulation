@@ -59,13 +59,18 @@ end
 % OBJECTIVE FUNCTION
 fitnessFcn = @(x) evaluateGA(x, txsConfig, rxConfig, fq);
 
-% GA SETTINGS
+% START PARALLEL POOL
+if isempty(gcp('nocreate'))
+    parpool;
+end
 
+
+% GA SETTINGS
 options = optimoptions('ga', ...
     'PopulationSize',25,...
     'MaxGenerations',20,...
     'Display','iter',...
-    'UseParallel',false);
+    'UseParallel', true);
 
 % RUN OPTIMIZER
 
